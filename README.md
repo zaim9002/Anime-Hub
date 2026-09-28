@@ -1,11 +1,42 @@
-<div align="center">
+# ANIME HUB 🎬
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+تطبيق أندرويد احترافي ومتكامل لمشاهدة واكتشاف الأنمي مع دعم كامل للغة العربية (RTL) والإنجليزية وتصميم داكن حديث (Dark Mode).
 
-  <h1>Built with AI Studio</h2>
+## المميزات الأساسية ✨
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+- **مصادر بيانات حقيقية**: مدمج مع **AniList GraphQL API** مع دعم **Jikan API** الاحتياطي للتنقل والبحث والترندات بدون أي بيانات وهمية.
+- **مشغل فيديو متطور**: مشغل Media3 / ExoPlayer يدعم:
+  - بث HLS (M3U8) عالي الدقة و MP4
+  - سرعات التشغيل المختلفة (0.5x, 0.75x, 1x, 1.25x, 1.5x, 2x)
+  - دعم الترجمة WebVTT/SRT باللغتين العربية والإنجليزية مع زر CC
+  - التبديل التلقائي للحلقة التالية مع عد تنازلي (Auto Next Episode)
+  - وضع ملء الشاشة الأفقي (Landscape Fullscreen) و Picture-in-Picture
+  - حفظ تقدم المشاهدة واستئناف التشغيل تلقائياً (Continue Watching)
+- **نظام مصادر الفيديو**: بنية نظيفة وقابلة للربط بخوادم خاصة أو CDN مع حظر كامل لمواقع القرصنة والروابط غير المرخصة.
+- **قاعدة بيانات محلية (Room Database)**:
+  - سجل المشاهدة (Watch History) مع نسبة التقدم والموضع بالدقيقة والثانية.
+  - المفضلة (Favorites) للوصول السريع إلى الأنميات المفضلة.
+  - قائمتي (My List) بحالاتها الخمس: يشاهد حالياً، مكتمل، يخطط للمشاهدة، معلق، ملغى.
+- **التصميم والأداء**:
+  - تصميم داكن فخم (Dark Obsidian & Neon Crimson) مع بطاقات حديثة وظلال ناعمة.
+  - واجهة عربية RTL أصيلة وتحويل فوري إلى English (LTR) من الإعدادات.
+  - مؤشرات تحميل Shimmer Skeleton Cards.
+  - معالجة شاملة للأخطاء وانقطاع الإنترنت.
+- **متوافق مع Android TV والأجهزة اللوحية (Tablets)**.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## البناء والتطوير 🛠️
 
-</div>
+### متطلبات التشغيل:
+- Android SDK 24+
+- JDK 17
+- Gradle 8+
+
+### بناء APK:
+```bash
+gradle assembleDebug
+```
+ينتج ملف الـ APK في المسار:
+`app/build/outputs/apk/debug/app-debug.apk`
+
+### خط إنتاج البناء الآلي (CI/CD):
+مفعل عبر GitHub Actions في `.github/workflows/android.yml` لإنتاج الـ APK تلقائياً ورفعه كـ Artifact.

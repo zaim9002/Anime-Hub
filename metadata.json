@@ -1,0 +1,6 @@
+{
+  "name": "Anime Hub",
+  "description": "تطبيق أنمي احترافي لمشاهدة وتصفح الأنمي ومتابعة الحلقات مع دعم اللغة العربية والإنجليزية وتصميم داكن حديث.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
