@@ -79,7 +79,8 @@ fun ProfileScreen(
     onLanguageChange: (AppLanguage) -> Unit,
     onThemeToggle: (Boolean) -> Unit,
     onAutoNextEpToggle: (Boolean) -> Unit,
-    onClearCache: () -> Unit
+    onClearCache: () -> Unit,
+    onOpenAdmin: () -> Unit
 ) {
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
@@ -153,6 +154,83 @@ fun ProfileScreen(
                     StatItem(count = favoritesCount.toString(), label = strings.addToFavorites, icon = Icons.Default.Star)
                     StatItem(count = myListCount.toString(), label = strings.addToList, icon = Icons.Default.Bookmark)
                     StatItem(count = historyCount.toString(), label = strings.history, icon = Icons.Default.History)
+                }
+            }
+        }
+
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+
+        // Admin Dashboard Section
+        item {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1528)),
+                shape = RoundedCornerShape(14.dp),
+                border = androidx.compose.foundation.BorderStroke(1.dp, AnimePrimary.copy(alpha = 0.5f)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onOpenAdmin)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            color = AnimePrimary,
+                            shape = RoundedCornerShape(10.dp),
+                            modifier = Modifier.size(42.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = "Admin",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Column {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "لوحة تحكم الإدارة (Admin Panel)",
+                                    color = DarkTextPrimary,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Surface(
+                                    color = AnimePrimary,
+                                    shape = RoundedCornerShape(4.dp)
+                                ) {
+                                    Text(
+                                        text = "PRO",
+                                        color = Color.White,
+                                        fontSize = 9.sp,
+                                        fontWeight = FontWeight.Black,
+                                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                    )
+                                }
+                            }
+                            Text(
+                                text = "إدارة الأنميات، المواسم، الحلقات، السيرفرات والمشرفين",
+                                color = DarkTextSecondary,
+                                fontSize = 11.sp
+                            )
+                        }
+                    }
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        contentDescription = null,
+                        tint = AnimePrimary,
+                        modifier = Modifier.size(16.dp)
+                    )
                 }
             }
         }
