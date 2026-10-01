@@ -21,18 +21,57 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew || true
+      - name: Set up Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
 
-      - name: Build Debug & Release APK
+      - name: Prepare environment configuration
         run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew assembleDebug --stacktrace
-          else
-            gradle assembleDebug --stacktrace
+          touch .env
+          if [ -f ".env.example" ]; then
+            cp -n .env.example .env 2>/dev/null || true
           fi
+
+      - name: Accept Android SDK licenses
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses 2>/dev/null || true
+
+      - name: Create or decode debug keystore
+        run: |
+          if [ -f "debug.keystore.base64" ] && [ ! -f "./debug.keystore" ]; then
+            echo "Decoding debug.keystore from debug.keystore.base64..."
+            base64 -d debug.keystore.base64 > debug.keystore 2>/dev/null || true
+          fi
+
+          if [ ! -f "./debug.keystore" ]; then
+            echo "Generating temporary debug keystore..."
+            keytool -genkey -v \
+              -keystore ./debug.keystore \
+              -storepass android \
+              -alias androiddebugkey \
+              -keypass android \
+              -dname "CN=Android Debug,O=Android,C=US" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000
+          fi
+
+      - name: Build Debug APK
+        run: gradle :app:assembleDebug --stacktrace --no-daemon --no-configuration-cache
+
+      - name: Verify APK output
+        run: |
+          TARGET_APK="app/build/outputs/apk/debug/app-debug.apk"
+          if [ ! -f "$TARGET_APK" ]; then
+            DISCOVERED=$(find app/build/outputs/apk -type f -name "*debug*.apk" | head -n 1)
+            if [ -n "$DISCOVERED" ] && [ -f "$DISCOVERED" ]; then
+              mkdir -p app/build/outputs/apk/debug
+              cp "$DISCOVERED" "$TARGET_APK"
+            fi
+          fi
+          ls -lh app/build/outputs/apk/debug/
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -40,3 +79,4 @@ jobs:
           name: AnimeHub-Debug-APK
           path: app/build/outputs/apk/debug/*.apk
           retention-days: 14
+          if-no-files-found: error
