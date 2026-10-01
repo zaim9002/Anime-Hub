@@ -28,7 +28,7 @@ jobs:
           JAVA_MAJOR=$(java -version 2>&1 | head -n 1 | awk -F '"' '{print $2}' | cut -d'.' -f1)
           echo "Active Java major version: $JAVA_MAJOR"
           if [ -z "$JAVA_MAJOR" ] || [ "$JAVA_MAJOR" -lt 17 ]; then
-            echo "Error: Java major version must be 17 or newer, detected: $JAVA_MAJOR" >&2
+            echo "Error: Active Java version must be 17 or newer. Detected: $JAVA_MAJOR" >&2
             exit 1
           fi
 
@@ -55,9 +55,9 @@ jobs:
           fi
 
           if [ -f "./debug.keystore" ]; then
-            echo "Confirmed: ./debug.keystore exists and is ready."
+            echo "Confirmed: ./debug.keystore exists."
           else
-            echo "Error: ./debug.keystore could not be created or found." >&2
+            echo "Error: ./debug.keystore could not be created." >&2
             exit 1
           fi
 
@@ -68,12 +68,11 @@ jobs:
         run: |
           TARGET_APK="app/build/outputs/apk/debug/app-debug.apk"
           if [ -f "$TARGET_APK" ]; then
-            echo "Verified: $TARGET_APK exists."
-            ls -lh "$TARGET_APK"
+            echo "Target APK verified at: $TARGET_APK"
           else
-            echo "Error: Expected APK file not found at $TARGET_APK" >&2
-            echo "Listing discovered APKs in app/build/outputs/apk:"
-            find app/build/outputs/apk -type f -name "*.apk" 2>/dev/null || echo "No APKs found."
+            echo "Error: Target APK missing at $TARGET_APK" >&2
+            echo "Searching only inside app/build/outputs/apk:"
+            find app/build/outputs/apk -type f -name "*.apk" 2>/dev/null || echo "No APK found."
             exit 1
           fi
 
